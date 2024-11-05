@@ -1,0 +1,48 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body text-center">
+      <h1 class="mb-3">
+        <img src="/secure-icon.png" alt="icon" width="20%" />
+      </h1>
+      <h2>Login</h2>
+
+      <!-- Flash message for errors -->
+      <% if (messages.error && messages.error.length > 0) { %>
+        <div style="color: red; font-weight: bold; margin-top: 10px;">
+          <%= messages.error[0] %>
+        </div>
+      <% } %>
+       
+
+      <form action="/auth/login" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter Email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Enter Password"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+      <div class="mt-3">
+        <span>OR</span>
+        <a href="/auth/github" class="btn btn-dark btn-block">Login with GitHub</a>
+      </div>
+      <p class="mt-4">New User? <a href="/auth/register">Register</a></p>
+      <p>Forgot Password? <a href="/auth/forgot">Reset</a></p>
+    </div>
+  </div>
+</div>
