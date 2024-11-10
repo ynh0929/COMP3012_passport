@@ -9,7 +9,7 @@ const localStrategy_1 = __importDefault(require("./passportStrategies/localStrat
 const githubStrategy_1 = __importDefault(require("./passportStrategies/githubStrategy"));
 // No need to actually pass the instance of passport since it returns a singleton
 const passportConfig = new PassportConfig_1.default([localStrategy_1.default, githubStrategy_1.default]);
-//passportConfig.addStrategies([localStrategy /* passportGitHubStrategy */]);
+passportConfig.addStrategies([localStrategy_1.default, githubStrategy_1.default]);
 const passportMiddleware = (app) => {
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());

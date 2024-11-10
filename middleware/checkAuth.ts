@@ -18,6 +18,7 @@ interface AuthenticatedRequest extends Request {
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
   // if the user is authenticated, continue with the request
   if (req.isAuthenticated()) {
+    
     return next();
   }
   // if the user is not authenticated, redirect to the login page

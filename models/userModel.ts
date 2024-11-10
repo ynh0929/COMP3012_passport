@@ -6,7 +6,7 @@ interface User {
   role: 'user' | 'admin';
 }
 
-const database: User [] = [
+const database: Express.User [] = [
   {
     id: 1,
     name: "Jimmy Smith",
@@ -33,7 +33,7 @@ const database: User [] = [
 const userModel = {
 
   /* FIX ME (types) 😭 */
-  findOne: (email: string): User | null => {
+  findOne: (email: string) => {
     const user = database.find((user) => user.email === email);
     if (user) {
       return user;
@@ -48,15 +48,6 @@ const userModel = {
     }
     throw new Error(`Couldn't find user with id: ${id}`);
   },
-
-  create: (user: Omit<User, 'id'>): User => {
-    const newUser = {
-      id: database.length + 1,
-      ...user,
-    };
-    database.push(newUser);
-    return newUser;
-  }
 };
 
-export { database, userModel, User };
+export { database, userModel };

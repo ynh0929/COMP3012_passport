@@ -1,6 +1,6 @@
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { PassportStrategy } from '../../interfaces/index';
-import { userModel } from '../../models/userModel';
+import { database, userModel } from '../../models/userModel';
 import { Request } from 'express';
 import { Profile } from 'passport-github2';
 import passport = require('passport');
@@ -26,20 +26,40 @@ const githubStrategy: GitHubStrategy = new GitHubStrategy(
     },
     async (req: Request, accessToken: string, refreshToken: string, profile: GitHubProfile, done: (error: any, user?: Express.User | null) => void) => {
         try {
+            console.log("GitHub profile:", profile);
             if (!profile.username) {
                 return done(new Error('No username found in profile'), null);
             }
         
-            let user = await userModel.findOne(profile.id);
+            // let user = await userModel.findOne(profile.id);
 
-            if (!user) {
-                user = await userModel.create({
-                    name: profile.username,
-                    email: "",                    
-                    password: "", 
-                    role: 'user',
-                });
+            const user = {
+                id: Number(profile.id),
+                name: profile.username,
+                email: "",
+                password: "",
+                role: 'user',
+            };
+
+            const foundUser = checkIfUserIsInDatabaseAlready(user.id);
+           
+            if(!foundUser){
+                database.push(user);
+                done(null, user);
             }
+            else{
+                done(null, foundUser);
+            }
+
+
+              // if (!user) {
+            //     user = await userModel.create({
+            //         name: profile.username,
+            //         email: "",                    
+            //         password: "", 
+            //         role: 'user',
+            //     });
+            // }
             done(null, user);
         } catch (error) {
             done(error);
@@ -54,4 +74,10 @@ const passportGitHubStrategy: PassportStrategy = {
     strategy: githubStrategy,
 };
 
+function checkIfUserIsInDatabaseAlready(id: number) {
+    return database.find(user => user.id === id) || null;
+}
+
 export default passportGitHubStrategy;
+
+

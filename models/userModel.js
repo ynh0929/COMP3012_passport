@@ -42,10 +42,5 @@ const userModel = {
         }
         throw new Error(`Couldn't find user with id: ${id}`);
     },
-    create: (user) => {
-        const newUser = Object.assign({ id: database.length + 1 }, user);
-        database.push(newUser);
-        return newUser;
-    }
 };
 exports.userModel = userModel;

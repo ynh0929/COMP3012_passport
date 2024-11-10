@@ -19,7 +19,7 @@ export default class PassportConfig {
         this.addStrategies(strategies);
     }
 
-    private addStrategies(strategies: PassportStrategy[]): void {
+    public addStrategies(strategies: PassportStrategy[]): void {
         strategies.forEach((passportStrategy: PassportStrategy) => {
             passport.use(passportStrategy.name, passportStrategy.strategy);
         });

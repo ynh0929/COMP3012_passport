@@ -27,18 +27,34 @@ const githubStrategy = new passport_github2_1.Strategy({
     passReqToCallback: true,
 }, (req, accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("GitHub profile:", profile);
         if (!profile.username) {
             return done(new Error('No username found in profile'), null);
         }
-        let user = yield userModel_1.userModel.findOne(profile.id);
-        if (!user) {
-            user = yield userModel_1.userModel.create({
-                name: profile.username,
-                email: "",
-                password: "",
-                role: 'user',
-            });
+        // let user = await userModel.findOne(profile.id);
+        const user = {
+            id: Number(profile.id),
+            name: profile.username,
+            email: "",
+            password: "",
+            role: 'user',
+        };
+        const foundUser = checkIfUserIsInDatabaseAlready(user.id);
+        if (!foundUser) {
+            userModel_1.database.push(user);
+            done(null, user);
         }
+        else {
+            done(null, foundUser);
+        }
+        // if (!user) {
+        //     user = await userModel.create({
+        //         name: profile.username,
+        //         email: "",                    
+        //         password: "", 
+        //         role: 'user',
+        //     });
+        // }
         done(null, user);
     }
     catch (error) {
@@ -50,4 +66,7 @@ const passportGitHubStrategy = {
     name: 'github',
     strategy: githubStrategy,
 };
+function checkIfUserIsInDatabaseAlready(id) {
+    return userModel_1.database.find(user => user.id === id) || null;
+}
 exports.default = passportGitHubStrategy;

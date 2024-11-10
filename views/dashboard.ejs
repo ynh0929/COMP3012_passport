@@ -4,11 +4,3 @@
 <% if (user.role === 'user') { %>
   <a href="/auth/logout" class="btn btn-secondary">Logout</a>
 <% } %>
-
-<% if (user && user.role === 'admin') { %>
-  <p>Current Active Sessions:</p>
-  Session ID: <%= user.sessionId %> <br>
-  User ID: <%= user.id %> <br>
-  <a href="/dashboard" class="btn btn-secondary">Revoke</a>
-
-<% } %>

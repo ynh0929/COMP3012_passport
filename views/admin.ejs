@@ -1,0 +1,16 @@
+<h1>Dashboard</h1>
+<p>Welcome <%= user.name %>!</p>
+
+<% if (sessions.length === 0) { %>
+  <p>No active sessions.</p>
+<% } else { %>
+  <h2>Current Active Sessions:</h2>
+  <% sessions.forEach(session => { %>
+    <p><strong>SessionID:</strong> <%= session.sessionId %></p>
+    <p><strong>UserID:</strong> <%= session.userId %></p>
+    <form action="/auth/admin" method="POST" style="margin-bottom: 20px;">
+      <input type="hidden" name="sessionId" value="<%= session.sessionId %>">
+      <button type="submit" class="btn btn-link" style="color: blue; text-decoration: underline; padding: 0; border: none; background: none;">Revoke Session</button>
+    </form>
+  <% }); %>
+<% } %>

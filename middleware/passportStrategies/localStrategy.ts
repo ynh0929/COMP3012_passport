@@ -2,12 +2,12 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { getUserByEmailIdAndPassword, getUserById} from "../../controllers/userController";
 import { PassportStrategy } from '../../interfaces/index';
-import { User } from "../../models/userModel";
 
 declare global {
   namespace Express {
     interface User {
       id: number;
+      name: string;
       email: string;
       password: string;
     }
@@ -20,14 +20,14 @@ const localStrategy = new LocalStrategy(
     passwordField: "password",
   },
   (email, password, done) => {
-    const {user, error } = getUserByEmailIdAndPassword(email, password);
-    if (error) {
+    const {user, error} = getUserByEmailIdAndPassword(email, password);
+    if(error){
       return done(null, false, { message: error });
     }
     if (user) {
       return done(null, user);
     } else {
-      return done(null, false, { message: "Invalid credentials" });
+      return done(null, false, { message: "Your login details are not valid. Please try again" });
     }
   }
 );
@@ -36,14 +36,14 @@ const localStrategy = new LocalStrategy(
 FIX ME (types) 😭
 */
 
-passport.serializeUser((user: Express.User, done) => {
+passport.serializeUser((user: Express.User, done: (err: any, id?: number) => void) => {
   done(null, user.id); 
 });
 
 /*
 FIX ME (types) 😭
 */
-passport.deserializeUser((id: number, done: (err: any, user?: Express.User | null) => void) => {
+passport.deserializeUser((id: number, done: (err: any, user?: Express.User | false | null) => void) => {
   let user = getUserById(id);
   if (user) {
     done(null, user);
